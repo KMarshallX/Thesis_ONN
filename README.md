@@ -3,9 +3,16 @@ This code is still under development, for faster training purposes, I tried to o
 it converged at (data)loss=1.4598, accuracy=45% (±10%).\
 ![result](./saved_images/1.jpg)\
 This model can be further improved by using larger size of dataset, and a low learning rate, however, this could cost 1 day to run through all of the 60,000 samples in the original MNIST data.
-Tune the neccessary parameters in [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py), and run it. For the training detail and more explicit training process, please refer to this [jupyter notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.ipynb) instead.
+Tune the neccessary parameters in [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py), and run it. The optical parameters used for the model are:
+```
+downsample = 4
+planeSpacing = 25.14e-3 # plane spacing
+wavelength = 1565e-9 
+pixelSize = downsample*8e-6
+```
+For the training detail and more explicit training process, please refer to this [jupyter notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.ipynb) instead.
 # Layer and Model
-Please see [this code](https://github.com/KMarshallX/Thesis_ONN/blob/master/model/ONN.py) for the code of the optical layer and the model. Line **53~82**, describes the mechanism of each optical layer (phase modualtion & free space propagation).
+Please see [this code](https://github.com/KMarshallX/Thesis_ONN/blob/master/model/ONN.py) for the code of the optical layer and the model. Line **53~82**, describes the mechanism of each optical layer (phase modualtion & free space propagation).The math may need to adjust if any errors exist.
 # Output of the Model
 The whole model is trained using the first 5000 samples of MNIST written digit dataset, with a learning rate of 5e-3, the accuracy converges to around 45%.\
 When an digit image is fed into the trained model (as below),\
