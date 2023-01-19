@@ -33,3 +33,8 @@ For a clear and distinguishable digit outside the range of the training dataset,
 (This chose image is the 5999th sample in the MNIST written digit dataset)\
 ![sample 6](./saved_images/sample_6000.png)
 ![output 6](./saved_images/output_6000.png)
+
+# Current problems:
+1. The accuracy is low, more tests will conduct on 256*256 images
+2. The imput image is directly applied onto the first layer (no propagation path during the input image and the first layer)
+3. Tensorflow warning, could be hardware problem, slowing down the whole traninging process
