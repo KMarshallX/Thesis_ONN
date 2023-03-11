@@ -1,1 +1,12 @@
 /__pycache__
+slurm.sh
+test.ipynb
+testbed.ipynb
+saved_images/loss_acc.jpg
+saved_model/test_onn/fingerprint.pb
+saved_model/test_onn/keras_metadata.pb
+saved_model/test_onn/saved_model.pb
+saved_model/test_onn/variables/variables.data-00000-of-00001
+saved_model/test_onn/variables/variables.index
+utils/__pycache__/loss_metrics.cpython-39.pyc
+utils/test.ipynb
