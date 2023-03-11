@@ -84,20 +84,29 @@ class opticalLayer(tf.keras.layers.Layer):
 class ONNModel(keras.Model):
     def __init__(self, units, distance, wavelength, Nx, Ny, pixelSize, num_layers):
         super(ONNModel, self).__init__()
-
+        self.prop = opticalLayer(units, distance, wavelength, Nx, Ny, pixelSize)
+        self.distance = distance
         self.all_layers = []
 
         for i in range(num_layers):
             self.all_layers.append(
-                opticalLayer(units, distance, wavelength, Nx, Ny, pixelSize)
+                self.prop
                 )
 
     def call(self, input_tensor):
 
-        x = self.all_layers[0](input_tensor)
+        input_prop = self.prop.propagation(input_tensor, self.distance)
+        x = self.all_layers[0](input_prop)
         for layer in self.all_layers[1:]:
             x = layer(x)
 
         return x
 
 
+if __name__ == "__main__":
+    inputs = tf.ones([256,256], tf.complex64)
+    mod = ONNModel([256,256], 25.14e-3, 1565e-9, 256, 256, 8e-6, 7)
+    out = mod(inputs)
+    print(out)
+    print(out.shape)
+    print(type(out))
