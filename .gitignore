@@ -8,5 +8,13 @@ saved_model/test_onn/keras_metadata.pb
 saved_model/test_onn/saved_model.pb
 saved_model/test_onn/variables/variables.data-00000-of-00001
 saved_model/test_onn/variables/variables.index
-utils/__pycache__/loss_metrics.cpython-39.pyc
+utils/__pycache__/
 utils/test.ipynb
+saved_model
+.vscode
+model/__pycache__/
+
+
+model/__pycache__/ONN.cpython-39.pyc
+utils/__pycache__/loss_metrics.cpython-39.pyc
+utils/__pycache__/utils_func.cpython-39.pyc
