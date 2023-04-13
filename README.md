@@ -1,40 +1,77 @@
 # Thesis_ONN
-This code is still under development, for faster training purposes, I tried to overfit the model to a small dataset (20 iteration through 5000 samples from MNIST written digits dataset), 
-it converged at (data)loss=1.4598, accuracy=45% (±10%).\
+This code is still under development, the model now is trained on the full train set of [MNIST written digits](https://keras.io/api/datasets/mnist/)  
+it converged at (data) loss=0.8756, accuracy=84.4533%.\
 ![result](./saved_images/1.jpg)\
-This model can be further improved by using larger size of dataset, and a low learning rate, however, this could cost 1 day to run through all of the 60,000 samples in the original MNIST data.
-Tune the neccessary parameters in [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py), and run it. The optical parameters used for the model are:
+This model can be further improved by 1) introducing complex modulation (amplitude and phase modulation) and 2) add more optical layers.
+The scripte used for training in [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py). 
 ```
-downsample = 4
-planeSpacing = 25.14e-3 # plane spacing
-wavelength = 1565e-9 
-pixelSize = downsample*8e-6
-```
-For the training detail and more explicit training process, please refer to this [jupyter notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.ipynb) instead.
-# Layer and Model
-Please see [this code](https://github.com/KMarshallX/Thesis_ONN/blob/master/model/ONN.py) for the code of the optical layer and the model. Line **53~82**, describes the mechanism of each optical layer (phase modualtion & free space propagation).The math may need to adjust if any errors exist.
-# Output of the Model
-The whole model is trained using the first 5000 samples of MNIST written digit dataset, with a learning rate of 5e-3, the accuracy converges to around 45%.\
-When an digit image is fed into the trained model (as below),\
-![sample 1](./saved_images/sample_1.png)\
-there will be an area with a the highest light intensity on the output image:\
-![output 1](./saved_images/output_1.png)\
-Other classification area can roughly be seen on the output image, from top to bottom, left to right, each squre represents **(0,1,2,3,4,5,6,7,8,9)** respectively.\
-Below attached some predictions made by the trained model:\
-![sample 2](./saved_images/sample_2.png)
-![output 2](./saved_images/output_2.png)\
-![sample 3](./saved_images/sample_3.png)
-![output 3](./saved_images/output_3.png)\
-![sample 4](./saved_images/sample_4.png)
-![output 4](./saved_images/output_4.png)\
-![sample 5](./saved_images/sample_5.png)
-![output 5](./saved_images/output_5.png)\
-For a clear and distinguishable digit outside the range of the training dataset, the model also has a good performance:\
-(This chose image is the 5999th sample in the MNIST written digit dataset)\
-![sample 6](./saved_images/sample_6000.png)
-![output 6](./saved_images/output_6000.png)
+The optical parameters used for the model are:
 
-# Current problems:
-1. The accuracy is low, more tests will conduct on 256*256 images
-2. The imput image is directly applied onto the first layer (no propagation path during the input image and the first layer)
-3. Tensorflow warning, could be hardware problem, slowing down the whole traninging process
+units = 200 (pixels) # input dimension
+planeSpacing = 5e-2 (metres) # plane spacing
+wavelength = 1565e-9 (metres)
+pixelSize = 8e-6 (metres)
+numLayers = 5   # number of optical layers
+learningRate = 1e-2 # learning rate
+epochs = 5  # training epochs
+
+```
+# Layer and Model
+Please see [this code](https://github.com/KMarshallX/Thesis_ONN/blob/master/model/ONN.py) for the code of the optical layer and the model. 
+# Conducted experiments
+## 1. Experiment 1
+In this experiment, the dimensions of the input images and layers within the model have been set to (200 * 200). The input image is an intensity pattern, the size of the intensity pattern is (56 * 56) and been padded to (200 * 200):
+<p align="center">
+<img src="./saved_images/sample_7.png">
+</p>
+
+**Results:**
+1. The accuracy reached **84.4533%** after 5 epochs
+2. Output intensity patterns:
+<p align="center">
+<img src="./saved_images/output_1.png">
+</p>
+
+3. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_200.ipynb) 
+
+## 2. Experiment 2
+In this experiment, the dimensions of the input images and layers within the model have been set to (56 * 56). The input image is an intensity pattern, the size of the intensity pattern is (56 * 56) without padding:
+<p align="center">
+<img src="./saved_images/sample_2.png">
+</p>
+
+**Results:**
+1. The accuracy reached **85.7817%** after 5 epochs
+<p align="center">
+<img src="./saved_images/2.jpg">
+</p>
+
+2. Output intensity patterns:
+<p align="center">
+<img src="./saved_images/output_2.png">
+</p>
+
+3. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_56.ipynb) 
+
+## 3. Experiment 3
+In this experiment, the input images have been converted to phase images. The dimension was (200 * 200), the size of image pattern was (56 * 56) and padded to (200 * 200):
+<p align="center">
+<img src="./saved_images/sample_3.png">
+<img src="./saved_images/sample_4.png">
+</p>
+
+
+**Results:**
+1. The accuracy reached **80.7633%** after 2 epochs
+<p align="center">
+<img src="./saved_images/3.jpg">
+</p>
+
+2. Output intensity patterns:
+<p align="center">
+<img src="./saved_images/output_3.png">
+</p>
+
+3. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_200_phase.ipynb) 
+
+
