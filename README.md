@@ -3,7 +3,7 @@ This code is still under development, the model now is trained on the full train
 it converged at (data) loss=0.8756, accuracy=84.4533%.\
 ![result](./saved_images/1.jpg)\
 This model can be further improved by 1) introducing complex modulation (amplitude and phase modulation) and 2) add more optical layers.
-The scripte used for training in [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py). 
+The script used for training is [train.py](https://github.com/KMarshallX/Thesis_ONN/blob/master/train.py). 
 ```
 The optical parameters used for the model are:
 
