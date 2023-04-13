@@ -8,14 +8,18 @@ import matplotlib.pyplot as plt
 
 from model.ONN import ONNModel
 from utils.loss_metrics import grad, optimizer_init
-from utils.utils_func import detector_regions, new_detector_regions, TrainDataLoader
+from utils.utils_func import detector_regions, TrainDataLoader
 import config
+import warnings
 
-def train(epoch_num, batch_size, size, model, optimizer, save_name):
+def train(epoch_num, batch_size, size, model, optimizer, save_name, step_num):
 
     # initialize training data loader
-    TDL = TrainDataLoader(size)
-    train_steps = int(len(TDL) / batch_size)
+    TDL = TrainDataLoader(size, phase_object=True)
+    if step_num == 0:
+        train_steps = int(len(TDL) / batch_size)
+    else:
+        train_steps = step_num
 
     train_loss_results = []
     train_accuracy_results = []
@@ -23,7 +27,6 @@ def train(epoch_num, batch_size, size, model, optimizer, save_name):
     for epoch in tqdm(range(epoch_num)):
         loss_avg = tf.keras.metrics.Mean()
         
-        #TODO
         acc = tf.keras.metrics.SparseCategoricalAccuracy()
 
         for step in tqdm(range(train_steps)):
@@ -45,12 +48,11 @@ def train(epoch_num, batch_size, size, model, optimizer, save_name):
                 y_pred.append(detector_regions(pred))
             
             acc.update_state(y_batch, y_pred)
-            print(f"\nStep :[{step+1}/{train_steps}]; Current batch loss :{loss_avg.result():.4f}, Current batch accuracy :{acc.result():.4%}")
+            tqdm.write(f"\nEpoch :[{epoch+1}/{epoch_num}]; Step :[{step+1}/{train_steps}]; Current batch loss :{loss_avg.result():.4f}, Current batch accuracy :{acc.result():.4%}")
         
         # End epoch
         train_loss_results.append(loss_avg.result())
         train_accuracy_results.append(acc.result())
-        print(f"\nEpoch :[{epoch+1}/{epoch_num}]")
 
     print("\nTraining completed!\n")
 
@@ -69,9 +71,12 @@ def train(epoch_num, batch_size, size, model, optimizer, save_name):
     axes[1].set_ylabel("Accuracy", fontsize=14)
     axes[1].set_xlabel("Epoch", fontsize=14)
     axes[1].plot(train_accuracy_results)
-    plt.savefig("./saved_images/loss_acc.jpg" )
+    out_img_path = "./saved_images/"+save_name+".jpg"
+    plt.savefig(out_img_path)
 
 if __name__ == "__main__":
+
+    warnings.filterwarnings('ignore')
 
     args = config.args
 
@@ -80,13 +85,16 @@ if __name__ == "__main__":
     planeSpacing = args.ps # plane spacing
     wavelength = args.lamb 
     pixelSize = downsample*args.pix
-    Nx = args.sz / downsample 
-    Ny = args.sz / downsample 
-    size = [args.sz, args.sz]
+    size = args.sz
+    Nx = size / downsample 
+    Ny = size / downsample 
+    
     epoch_num = args.ep # iteration number
+    layers_num = args.ly
     batch_size = args.bt 
     learning_rate = args.lr
     model_name = args.mo_name
+    step_num = args.test 
     
     #Check devices
     device_name = tf.test.gpu_device_name()
@@ -98,12 +106,12 @@ if __name__ == "__main__":
     # device_name = "/device:CPU:0"
 
     #initialize optimizer
-    boundaries = [6000, 12000, 18000, 21000]
-    values = [1e-2, 1e-3, 1e-4, 5e-5, 1e-6]
-    learning_rate_fn = tf.keras.optimizers.schedules.PiecewiseConstantDecay(boundaries, values)
-    optimizer = optimizer_init(learning_rate_fn)
+    # boundaries = [2400, 3600]
+    # values = [learning_rate, 0.8*learning_rate, 0.64*learning_rate]
+    # learning_rate_fn = tf.keras.optimizers.schedules.PiecewiseConstantDecay(boundaries, values)
+    optimizer = optimizer_init(learning_rate)
 
     with tf.device(device_name):
-        ONN_block = ONNModel(size, planeSpacing, wavelength, Nx, Ny, pixelSize, 7)
+        ONN_block = ONNModel(size, planeSpacing, wavelength, Nx, Ny, pixelSize, layers_num)
         # Train Loop
-        train(epoch_num, batch_size, size[0], ONN_block, optimizer, model_name)
+        train(epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)
