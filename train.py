@@ -15,7 +15,7 @@ import warnings
 def train(epoch_num, batch_size, size, model, optimizer, save_name, step_num):
 
     # initialize training data loader
-    TDL = TrainDataLoader(size, phase_object=True)
+    TDL = TrainDataLoader(size, phase_object=False)
     if step_num == 0:
         train_steps = int(len(TDL) / batch_size)
     else:

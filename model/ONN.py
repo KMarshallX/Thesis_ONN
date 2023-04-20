@@ -66,8 +66,9 @@ class opticalLayer(tf.keras.layers.Layer):
         self.pixelSize = pixelSize
 
     def build(self, input_shape): 
-        initializer = tf.random_normal_initializer(mean=np.pi, stddev=np.pi)
+        # initializer = tf.random_normal_initializer(mean=np.pi, stddev=np.pi)
         # initializer = tf.random_normal_initializer()
+        initializer = tf.keras.initializers.Zeros()
         # input shape is the same as the output shape for an optical layer
         # initialize phases of one layer here
         self.phase = tf.Variable(initial_value=initializer(shape=(self.units, self.units), dtype=tf.float32), trainable=True, constraint=lambda t: tf.clip_by_value(t, 0, 2*np.pi))

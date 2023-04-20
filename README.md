@@ -60,7 +60,6 @@ In this experiment, the input images have been converted to phase images. The di
 <img src="./saved_images/sample_4.png">
 </p>
 
-
 **Results:**
 1. The accuracy reached **80.7633%** after 2 epochs
 <p align="center">
@@ -74,4 +73,30 @@ In this experiment, the input images have been converted to phase images. The di
 
 3. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_200_phase.ipynb) 
 
+## 4. Experiment 4 (updated in 04/20/2023)
+Changed the initialization of the optical layers: changed from random distribution to full zeros. Below shows the input and output intensity pattern, and the first phase mask.\
+Other changed parameters: number of layers = 7, plane spacing = 0.005 (metres)\
+Input image:
+<p align="center">
+<img src="./saved_images/sample_7.png">
+</p>
+
+**Results:**
+1. The accuracy reached **87.5967%** after 5 epochs
+<p align="center">
+<img src="./saved_images/4.jpg">
+</p>
+
+2. Output intensity patterns:
+<p align="center">
+<img src="./saved_images/output_4.png">
+</p>
+
+3. The first and the last phase masks:
+<p align="center">
+<img src="./saved_images/phase1.png">
+<img src="./saved_images/phase2.png">
+</p>
+
+4. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_200_planeSpacing5cm.ipynb) 
 
