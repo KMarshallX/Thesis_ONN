@@ -113,15 +113,15 @@ class opticalLayer(tf.keras.layers.Layer):
 
 ## Building the network model
 class ONNModel(keras.Model):
-    def __init__(self, units, distance, wavelength, Nx, Ny, pixelSize, num_layers):
+    def __init__(self, units, distance1, distance2, wavelength, Nx, Ny, pixelSize, num_layers):
         super(ONNModel, self).__init__()
 
-        self.prop = FSpropagation(units, distance, wavelength, Nx, Ny, pixelSize)
+        self.prop = FSpropagation(units, distance1, wavelength, Nx, Ny, pixelSize)
         self.all_layers = []
 
         self.all_layers.append(self.prop) # add the first defractive layer
         for i in range(num_layers):
-            layer = opticalLayer(units, distance, wavelength, Nx, Ny, pixelSize)
+            layer = opticalLayer(units, distance2, wavelength, Nx, Ny, pixelSize)
             self.all_layers.append(layer)
 
     def call(self, input_tensor):
@@ -137,7 +137,7 @@ if __name__ == "__main__":
     
     lay = opticalLayer(200, 3e-2, 0.75e-3, 200, 200, 400e-6)
     out1 = lay(inputs)
-    mod = ONNModel(200, 3e-2, 0.75e-3, 200, 200, 400e-6, 7)
+    mod = ONNModel(200, 3e-2, 3e-2, 0.75e-3, 200, 200, 400e-6, 7)
     out2 = mod(inputs)
     print(out1)
     print(out1.shape)

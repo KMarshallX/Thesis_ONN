@@ -83,6 +83,7 @@ if __name__ == "__main__":
     # Load parameters
     downsample = args.ds
     planeSpacing = args.ps # plane spacing
+    diffractionSpacing = args.df # Distance from source to first plane
     wavelength = args.lamb 
     pixelSize = downsample*args.pix
     size = args.sz
@@ -111,7 +112,11 @@ if __name__ == "__main__":
     # learning_rate_fn = tf.keras.optimizers.schedules.PiecewiseConstantDecay(boundaries, values)
     optimizer = optimizer_init(learning_rate)
 
+    # Any test message goes below here
+    print(f"Source spacing: {diffractionSpacing} ,Plane spacing: {planeSpacing}, size: {size}, pixel dimension: {pixelSize}, epoch number: {epoch_num}, number of layers: {layers_num}, learning rate: {learning_rate}\n")
+
+
     with tf.device(device_name):
-        ONN_block = ONNModel(size, planeSpacing, wavelength, Nx, Ny, pixelSize, layers_num)
+        ONN_block = ONNModel(size, diffractionSpacing, planeSpacing, wavelength, Nx, Ny, pixelSize, layers_num)
         # Train Loop
         train(epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)

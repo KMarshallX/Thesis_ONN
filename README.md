@@ -100,3 +100,43 @@ Input image:
 
 4. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_200_planeSpacing5cm.ipynb) 
 
+## 5. Experiment 5 (updated in 04/24/2023)
+Changed the dimension from 200 to 256, \
+the size of the digit pattern changed from 56 to 38, \
+the detector area size changed from 4 to 3. \
+Below shows the input and output intensity pattern, and the first phase mask.\
+Input image:
+<p align="center">
+<img src="./saved_images/sample_7.png">
+</p>
+
+**Results:**
+1. The accuracy reached **85.9317%** after 5 epochs
+<p align="center">
+<img src="./saved_images/5.jpg">
+</p>
+
+2. Output intensity patterns:
+<p align="center">
+<img src="./saved_images/output_5.png">
+</p>
+
+3. The first and the last phase masks:
+<p align="center">
+<img src="./saved_images/phase3.png">
+<img src="./saved_images/phase4.png">
+</p>
+
+4. For detailed information and phase masks patterns, please refer to [this notebook](https://github.com/KMarshallX/Thesis_ONN/blob/master/validate_256_MPLCsetup.ipynb) 
+
+# First MPLC setup
+1. The generated phase masks of each layer:
+<p align="center">
+<img src="./saved_images/mplc1_phase.png">
+</p>
+
+2. Intensity patterns of each layer:
+<p align="center">
+<img src="./saved_images/mplc1_intensity.png">
+</p>
+

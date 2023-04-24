@@ -7,22 +7,62 @@ def rang(arr,top_left_corner):
     # top_left_corner is a tuple i.e. (2,2)
     x0 = top_left_corner[0]
     y0 = top_left_corner[1]
-    delta = 4
+    delta = 3 # for 28*28
+    # delta = 4 # for 56*56
     return arr[x0:x0+delta,y0:y0+delta]
 
 # Ues this when the image is padded
 def _detector_regions(a):
     return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
-        rang(a,(83,83)), # 0
-        rang(a,(83,99)), # 1
-        rang(a,(83,115)), # 2
-        rang(a,(99,80)),  # 3
-        rang(a,(99,92)), # 4
-        rang(a,(99,104)), # 5
-        rang(a,(99,116)), # 6
-        rang(a,(115,83)), # 7
-        rang(a,(115,99)), # 8
-        rang(a,(115,115))  # 9
+        # # for 56*56 pattern
+        # rang(a,(83,83)), # 0
+        # rang(a,(83,99)), # 1
+        # rang(a,(83,115)), # 2
+        # rang(a,(99,80)),  # 3
+        # rang(a,(99,92)), # 4
+        # rang(a,(99,104)), # 5
+        # rang(a,(99,116)), # 6
+        # rang(a,(115,83)), # 7
+        # rang(a,(115,99)), # 8
+        # rang(a,(115,115))  # 9
+
+        # # for 28*28 pattern (1)
+        # rang(a,(90,90)), # 0
+        # rang(a,(90,98)), # 1
+        # rang(a,(90,106)), # 2
+        # rang(a,(98,86)),  # 3
+        # rang(a,(98,94)), # 4
+        # rang(a,(98,102)), # 5
+        # rang(a,(98,110)), # 6
+        # rang(a,(106,90)), # 7
+        # rang(a,(106,98)), # 8
+        # rang(a,(106,106))  # 9
+
+        # # for 28*28 pattern (2)
+        # rang(a,(91,91)), # 0
+        # rang(a,(91,99)), # 1
+        # rang(a,(91,107)), # 2
+        # rang(a,(99,89)),  # 3
+        # rang(a,(99,95)), # 4
+        # rang(a,(99,102)), # 5
+        # rang(a,(99,108)), # 6
+        # rang(a,(107,91)), # 7
+        # rang(a,(107,99)), # 8
+        # rang(a,(107,107))  # 9
+
+        # for 38*38 pattern 
+        rang(a,(116,116)), # 0
+        rang(a,(116,126)), # 1
+        rang(a,(116,136)), # 2
+        rang(a,(126,114)),  # 3
+        rang(a,(126,122)), # 4
+        rang(a,(126,130)), # 5
+        rang(a,(126,138)), # 6
+        rang(a,(136,116)), # 7
+        rang(a,(136,126)), # 8
+        rang(a,(136,136))  # 9
+
+
     ])) 
 
 # # Use this when the image is not padded
@@ -48,9 +88,9 @@ class TrainDataLoader:
     def __init__(self, size, pad=True, phase_object=False) -> None:
 
         digits_MNIST = keras.datasets.mnist
-        (self.train_img, self.train_lb), (_, _) = digits_MNIST.load_data() # 28*28
+        (self.train_img, self.train_lb), (_, _) = digits_MNIST.load_data() # 38*38
         
-        self.size = size # pad the resized image to 200*200
+        self.size = size # pad the resized image to 256*256
         self.pad = pad
         self.phase_object = phase_object
 
@@ -61,7 +101,7 @@ class TrainDataLoader:
         X = self.train_img[idx]
         y = self.train_lb[idx]
         #resize
-        X = scind.zoom(X, (1, 2, 2), order=0, mode='nearest') # double the size of the image
+        X = scind.zoom(X, (1, 19/14, 19/14), order=0, mode='nearest') # double the size of the image
         # normailization
         X = X / 255.0
         # convert to phase object
@@ -86,9 +126,9 @@ class TestDataLoader:
     def __init__(self, size, pad=True, phase_object=False) -> None:
 
         digits_MNIST = keras.datasets.mnist
-        (_, _), (self.test_img, self.test_lb) = digits_MNIST.load_data() # 28*28
+        (_, _), (self.test_img, self.test_lb) = digits_MNIST.load_data() # 38*38
         
-        self.size = size # pad the resized image to 200*200
+        self.size = size # pad the resized image to 256*256
         self.pad = pad
         self.phase_object = phase_object
 
@@ -99,7 +139,7 @@ class TestDataLoader:
         X = self.test_img[idx]
         y = self.test_lb[idx]
         #resize
-        X = scind.zoom(X, (1, 2, 2), order=0, mode='nearest') # double the size of the image
+        X = scind.zoom(X, (1, 19/14, 19/14), order=0, mode='nearest') # double the size of the image
         # normailization
         X = X / 255.0
         # convert to phase object
