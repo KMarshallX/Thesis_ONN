@@ -80,6 +80,7 @@ H0 = transferFunctionOfFreeSpace(X,Y,planeSpacing,lambda);
 maxR = max(max(R));
 H = H0.*(R<(kSpaceFilter.*maxR));
 
+
 %Initialise fields
 %Put the spots as the field in the first plane travelling forward
 FIELDS(1,1,:,:) = SPOT;
