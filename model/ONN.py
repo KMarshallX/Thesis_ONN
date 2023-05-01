@@ -71,14 +71,14 @@ class opticalLayer(tf.keras.layers.Layer):
         initializer = tf.keras.initializers.Zeros()
         # input shape is the same as the output shape for an optical layer
         # initialize phases of one layer here
-        self.phase = tf.Variable(initial_value=initializer(shape=(self.units, self.units), dtype=tf.float32), trainable=True, constraint=lambda t: tf.clip_by_value(t, 0, 2*np.pi))
+        self.phase = tf.Variable(initial_value=initializer(shape=(self.units, self.units), dtype=tf.float32), trainable=True, constraint=lambda t: tf.clip_by_value(t, -np.pi, np.pi))
     
     @tf.function(reduce_retracing=True)
     def call(self, inputs):
         # inputs: input source (dtype: tf.complex64)
         # This function will return the output sources after free-space propagation (the input sources of the next layer)
         # make amp and phase complex values (the model only has phase modulation for now)
-        imag_phi = tf.math.exp(1j*tf.cast(self.phase, dtype = tf.complex64))
+        imag_phi = tf.math.exp(-1j*tf.cast(self.phase, dtype = tf.complex64))
         phase_modulated_image = tf.math.multiply(inputs, imag_phi)
         
         def propagation(inputs):

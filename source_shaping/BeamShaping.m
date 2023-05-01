@@ -6,6 +6,12 @@ close all;
 load("test.mat");
 
 %% Parameters initialization
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Input mode field diameter: 864 um
+% Output field size: 350 um -> digit size: 38*38 pixels
+% Distance to the first plane: 36.34 mm
+% Distance between planes: 50.06 mm
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Centre Wavelength
 lambda = 1565e-9;
 %Phase mask pixel pitch
@@ -20,9 +26,9 @@ planeCount = 7;
 Nx = 256;
 Ny = 256;
 %number of total passes to run for
-iterationCount = 1000;
+iterationCount = 200;
 %Display graphs of fields/masks every N passes
-graphIterations = 10;
+graphIterations = 5;
 %Mode-field diameter (MFD) of input Gaussian beams
 MFDin = 864e-6;
 
