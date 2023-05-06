@@ -13,6 +13,7 @@ parser.add_argument('--pix', type = float, default = 9.2e-6, help="Pixel dimensi
 parser.add_argument('--sz', type = int, default=256, help="Iuput image size")
 
 # training hyperparameters
+parser.add_argument('--da', type = str, default = "fashion", help="Data type for training, choose between [digit and fashion]")
 parser.add_argument('--ep', type = int, default = 1, help="Number of epochs")
 parser.add_argument('--ly', type = int, default = 7, help="Number of layers")
 parser.add_argument('--lr', type = float, default = 1e-2, help="Learning rate")

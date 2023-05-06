@@ -3,7 +3,7 @@ Loss Metircs
 """
 import tensorflow as tf
 from tensorflow import keras
-from utils.utils_func import detector_regions, new_detector_regions
+from utils.utils_func import detector_regions
 
 
 def loss(model, target, inputs, training):

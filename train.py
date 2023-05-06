@@ -8,14 +8,20 @@ import matplotlib.pyplot as plt
 
 from model.ONN import ONNModel
 from utils.loss_metrics import grad, optimizer_init
-from utils.utils_func import detector_regions, TrainDataLoader
+from utils.utils_func import detector_regions, TrainDataLoader, TrainFashionDataLoader
 import config
 import warnings
 
-def train(epoch_num, batch_size, size, model, optimizer, save_name, step_num):
+def train(data_type, epoch_num, batch_size, size, model, optimizer, save_name, step_num):
 
     # initialize training data loader
-    TDL = TrainDataLoader(size, phase_object=False)
+    if data_type == "digit":
+        TDL = TrainDataLoader(size, phase_object=False)
+    elif data_type == "fashion":
+        TDL = TrainFashionDataLoader(size, phase_object=False)
+    else:
+        raise Exception("Choose data type between [digit] and [fashion]!")
+
     if step_num == 0:
         train_steps = int(len(TDL) / batch_size)
     else:
@@ -90,6 +96,7 @@ if __name__ == "__main__":
     Nx = size / downsample 
     Ny = size / downsample 
     
+    data_type = args.da
     epoch_num = args.ep # iteration number
     layers_num = args.ly
     batch_size = args.bt 
@@ -119,4 +126,4 @@ if __name__ == "__main__":
     with tf.device(device_name):
         ONN_block = ONNModel(size, diffractionSpacing, planeSpacing, wavelength, Nx, Ny, pixelSize, layers_num)
         # Train Loop
-        train(epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)
+        train(data_type, epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)
