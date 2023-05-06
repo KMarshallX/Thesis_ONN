@@ -191,11 +191,12 @@ for i=1:iterationCount
     if (mod(i,graphIterations)==0)
         newGraphFields;
     end
+
     waitbar(i/iterationCount, pb, sprintf('%d / %d', i, iterationCount));
 end
 close(pb)
 
-%%
+%% Final error calculation
 %Use the un-filtered transfer function of free-space (the entire
 %angle-space)
 h = H0;
@@ -204,7 +205,7 @@ directionIdx = 1;
 for planeIdx=1:(planeCount-1)
     %Conjugate phase of the mask in this plane.
     MASK = exp(-1i.*angle(squeeze(MASKS(planeIdx,:,:))));
-    
+    % only one mode
     field = squeeze(FIELDS(directionIdx,planeIdx,:,:));
     %Apply mask
     field = field.*MASK;
@@ -214,8 +215,31 @@ for planeIdx=1:(planeCount-1)
     FIELDS(directionIdx,planeIdx+1,:,:) = field;
 end
 
+% overlap integral
+fieldIn = squeeze(FIELDS(1,planeCount,:,:));
+% % apply phase mask
+% fieldIn = fieldIn.*squeeze(exp(1i.*angle(MASKS(planeCount,:,:))));
+% normalization
+fieldIn = fieldIn ./ sqrt(sum(sum(abs(fieldIn).^2)));
+%get the field in the backward direction at the last plane
+fieldOut = squeeze(FIELDS(2,planeCount,:,:));
+% normalization
+fieldOut = fieldOut ./ sqrt(sum(sum(abs(fieldOut).^2)));
+%Calculate the overlap integral between the two (fieldIn already
+%conjugated)
+overlapVector = sum(sum(conj(fieldIn) .* fieldOut));
+intensityOverlap = abs(overlapVector) .^ 2;% Result = 0.0828
+
+
+% E1 = fieldIn;
+% E2 = fieldOut;
+% numerator = abs(sum(sum(E1 .* E2))).^2;
+% denominator = sum(sum(abs(E1).^2)) .* sum(sum(abs(E2).^2));
+% OI = numerator ./ denominator;  % OI = 0.2706
+
 % Single img processing done
-fprintf('Single img processing done!');
+fprintf('Single img processing done!\n');
+fprintf('The overlap integral of the two fields in the last plane is %.4f', intensityOverlap);
     
 %%
 % save("testMasks.mat", "MASKS")
