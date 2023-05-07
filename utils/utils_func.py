@@ -62,6 +62,53 @@ def _detector_regions(a):
         rang(a,(136,126)), # 8
         rang(a,(136,136))  # 9
 
+        # # 2*2 detector area, need to change line 10
+        # rang(a,(117,117)),
+        # rang(a,(117,127)),
+        # rang(a,(117,137)),
+        # rang(a,(127,115)),
+        # rang(a,(127,123)),
+        # rang(a,(127,131)),
+        # rang(a,(127,138)),
+        # rang(a,(137,117)),
+        # rang(a,(137,127)),
+        # rang(a,(137,137))
+
+        # # 4*4 detector area, need to change line 10
+        # rang(a,(109,109)),
+        # rang(a,(109,126)),
+        # rang(a,(109,143)),
+        # rang(a,(126,109)),
+        # rang(a,(126,120)),
+        # rang(a,(126,132)),
+        # rang(a,(126,143)),
+        # rang(a,(143,109)),
+        # rang(a,(143,126)),
+        # rang(a,(143,143))
+
+        # # 6*6 detector area, need to change line 10
+        # rang(a,(109,109)),
+        # rang(a,(109,125)),
+        # rang(a,(109,141)),
+        # rang(a,(125,109)),
+        # rang(a,(125,120)),
+        # rang(a,(125,130)),
+        # rang(a,(125,141)),
+        # rang(a,(141,109)),
+        # rang(a,(141,125)),
+        # rang(a,(141,141))
+
+        # # 10*10 detector area, need to change line 10
+        # rang(a,(103,103)),
+        # rang(a,(103,123)),
+        # rang(a,(103,143)),
+        # rang(a,(123,93)),
+        # rang(a,(123,113)),
+        # rang(a,(123,133)),
+        # rang(a,(123,153)),
+        # rang(a,(143,103)),
+        # rang(a,(143,123)),
+        # rang(a,(143,143))
 
     ])) 
 
