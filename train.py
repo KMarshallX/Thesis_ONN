@@ -12,7 +12,7 @@ from utils.utils_func import detector_regions, TrainDataLoader, TrainFashionData
 import config
 import warnings
 
-def train(data_type, epoch_num, batch_size, size, model, optimizer, save_name, step_num):
+def train(data_type, detector_mode, epoch_num, batch_size, size, model, optimizer, save_name, step_num):
 
     # initialize training data loader
     if data_type == "digit":
@@ -39,7 +39,7 @@ def train(data_type, epoch_num, batch_size, size, model, optimizer, save_name, s
 
             x_batch, y_batch = TDL[step*batch_size:(step+1)*batch_size]
             
-            loss_val, grad_val = grad(ONN_block, y_batch, x_batch)
+            loss_val, grad_val = grad(ONN_block, y_batch, x_batch, detector_mode)
             optimizer.apply_gradients(zip(grad_val, ONN_block.trainable_variables))
 
             # Track progress
@@ -51,7 +51,7 @@ def train(data_type, epoch_num, batch_size, size, model, optimizer, save_name, s
                 pred = ONN_block(x_batch[z], training=True)
                 # training=True is needed only if there are layers with different
                 # behavior during training versus inference (e.g. Dropout).
-                y_pred.append(detector_regions(pred))
+                y_pred.append(detector_regions(pred, detector_mode))
             
             acc.update_state(y_batch, y_pred)
             tqdm.write(f"\nEpoch :[{epoch+1}/{epoch_num}]; Step :[{step+1}/{train_steps}]; Current batch loss :{loss_avg.result():.4f}, Current batch accuracy :{acc.result():.4%}")
@@ -97,6 +97,7 @@ if __name__ == "__main__":
     Ny = size / downsample 
     
     data_type = args.da
+    detector_mode = args.dm
     epoch_num = args.ep # iteration number
     layers_num = args.ly
     batch_size = args.bt 
@@ -126,4 +127,4 @@ if __name__ == "__main__":
     with tf.device(device_name):
         ONN_block = ONNModel(size, diffractionSpacing, planeSpacing, wavelength, Nx, Ny, pixelSize, layers_num)
         # Train Loop
-        train(data_type, epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)
+        train(data_type, detector_mode, epoch_num, batch_size, size, ONN_block, optimizer, model_name, step_num)

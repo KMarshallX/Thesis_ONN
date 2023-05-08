@@ -6,7 +6,7 @@ from tensorflow import keras
 from utils.utils_func import detector_regions
 
 
-def loss(model, target, inputs, training):
+def loss(model, target, inputs, training, detector_mode):
 
     # Initialize loss metric
     loss_object = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
@@ -14,16 +14,16 @@ def loss(model, target, inputs, training):
     logits = []
     for i in range(len(inputs)):
         pred = model(inputs[i], training=training)
-        logits.append(detector_regions(pred))
+        logits.append(detector_regions(pred, detector_mode))
 
     return loss_object(target, logits)
     # loss_object(y_true, y_pred)
     # y_true: Ground truth values. shape = [batch_size, d0, .. dN],
 
 # Use the tf.GradientTape context to calculate the gradients used to optimize your model:
-def grad(model, target, input):
+def grad(model, target, input, detector_mode):
     with tf.GradientTape() as tape:
-        loss_val = loss(model, target, input, training=True)
+        loss_val = loss(model, target, input, training=True, detector_mode=detector_mode)
 
     return loss_val, tape.gradient(loss_val, model.trainable_variables)
 

@@ -3,114 +3,89 @@ from tensorflow import keras
 import numpy as np
 import scipy.ndimage as scind
 
-def rang(arr,top_left_corner):
+def rang(arr,top_left_corner, delta):
     # top_left_corner is a tuple i.e. (2,2)
     x0 = top_left_corner[0]
     y0 = top_left_corner[1]
-    delta = 3 # for 28*28
+    # delta = 3 # for 28*28
     # delta = 4 # for 56*56
     return arr[x0:x0+delta,y0:y0+delta]
 
 # Ues this when the image is padded
 def _detector_regions(a):
     return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
-        # # for 56*56 pattern
-        # rang(a,(83,83)), # 0
-        # rang(a,(83,99)), # 1
-        # rang(a,(83,115)), # 2
-        # rang(a,(99,80)),  # 3
-        # rang(a,(99,92)), # 4
-        # rang(a,(99,104)), # 5
-        # rang(a,(99,116)), # 6
-        # rang(a,(115,83)), # 7
-        # rang(a,(115,99)), # 8
-        # rang(a,(115,115))  # 9
-
-        # # for 28*28 pattern (1)
-        # rang(a,(90,90)), # 0
-        # rang(a,(90,98)), # 1
-        # rang(a,(90,106)), # 2
-        # rang(a,(98,86)),  # 3
-        # rang(a,(98,94)), # 4
-        # rang(a,(98,102)), # 5
-        # rang(a,(98,110)), # 6
-        # rang(a,(106,90)), # 7
-        # rang(a,(106,98)), # 8
-        # rang(a,(106,106))  # 9
-
-        # # for 28*28 pattern (2)
-        # rang(a,(91,91)), # 0
-        # rang(a,(91,99)), # 1
-        # rang(a,(91,107)), # 2
-        # rang(a,(99,89)),  # 3
-        # rang(a,(99,95)), # 4
-        # rang(a,(99,102)), # 5
-        # rang(a,(99,108)), # 6
-        # rang(a,(107,91)), # 7
-        # rang(a,(107,99)), # 8
-        # rang(a,(107,107))  # 9
-
         # for 38*38 pattern 
-        rang(a,(116,116)), # 0
-        rang(a,(116,126)), # 1
-        rang(a,(116,136)), # 2
-        rang(a,(126,114)),  # 3
-        rang(a,(126,122)), # 4
-        rang(a,(126,130)), # 5
-        rang(a,(126,138)), # 6
-        rang(a,(136,116)), # 7
-        rang(a,(136,126)), # 8
-        rang(a,(136,136))  # 9
-
-        # # 2*2 detector area, need to change line 10
-        # rang(a,(117,117)),
-        # rang(a,(117,127)),
-        # rang(a,(117,137)),
-        # rang(a,(127,115)),
-        # rang(a,(127,123)),
-        # rang(a,(127,131)),
-        # rang(a,(127,138)),
-        # rang(a,(137,117)),
-        # rang(a,(137,127)),
-        # rang(a,(137,137))
-
-        # # 4*4 detector area, need to change line 10
-        # rang(a,(109,109)),
-        # rang(a,(109,126)),
-        # rang(a,(109,143)),
-        # rang(a,(126,109)),
-        # rang(a,(126,120)),
-        # rang(a,(126,132)),
-        # rang(a,(126,143)),
-        # rang(a,(143,109)),
-        # rang(a,(143,126)),
-        # rang(a,(143,143))
-
-        # # 6*6 detector area, need to change line 10
-        # rang(a,(109,109)),
-        # rang(a,(109,125)),
-        # rang(a,(109,141)),
-        # rang(a,(125,109)),
-        # rang(a,(125,120)),
-        # rang(a,(125,130)),
-        # rang(a,(125,141)),
-        # rang(a,(141,109)),
-        # rang(a,(141,125)),
-        # rang(a,(141,141))
-
-        # # 10*10 detector area, need to change line 10
-        # rang(a,(103,103)),
-        # rang(a,(103,123)),
-        # rang(a,(103,143)),
-        # rang(a,(123,93)),
-        # rang(a,(123,113)),
-        # rang(a,(123,133)),
-        # rang(a,(123,153)),
-        # rang(a,(143,103)),
-        # rang(a,(143,123)),
-        # rang(a,(143,143))
-
+        rang(a,(116,116),3), # 0
+        rang(a,(116,126),3), # 1
+        rang(a,(116,136),3), # 2
+        rang(a,(126,114),3),  # 3
+        rang(a,(126,122),3), # 4
+        rang(a,(126,130),3), # 5
+        rang(a,(126,138),3), # 6
+        rang(a,(136,116),3), # 7
+        rang(a,(136,126),3), # 8
+        rang(a,(136,136),3)  # 9
     ])) 
+
+# 2*2 detector area, need to change line 10
+def _detector_regions2(a):
+    return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
+        rang(a,(117,117),2),
+        rang(a,(117,127),2),
+        rang(a,(117,137),2),
+        rang(a,(127,115),2),
+        rang(a,(127,123),2),
+        rang(a,(127,131),2),
+        rang(a,(127,138),2),
+        rang(a,(137,117),2),
+        rang(a,(137,127),2),
+        rang(a,(137,137),2)
+    ])) 
+
+# 4*4 detector area, need to change line 10
+def _detector_regions4(a):
+    return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
+        rang(a,(109,109),4),
+        rang(a,(109,126),4),
+        rang(a,(109,143),4),
+        rang(a,(126,109),4),
+        rang(a,(126,120),4),
+        rang(a,(126,132),4),
+        rang(a,(126,143),4),
+        rang(a,(143,109),4),
+        rang(a,(143,126),4),
+        rang(a,(143,143),4)
+    ]))
+
+# 6*6 detector area, need to change line 10
+def _detector_regions6(a):
+    return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
+        rang(a,(109,109),6),
+        rang(a,(109,125),6),
+        rang(a,(109,141),6),
+        rang(a,(125,109),6),
+        rang(a,(125,120),6),
+        rang(a,(125,130),6),
+        rang(a,(125,141),6),
+        rang(a,(141,109),6),
+        rang(a,(141,125),6),
+        rang(a,(141,141),6)
+    ]))
+
+# 10*10 detector area, need to change line 10
+def _detector_regions10(a):
+    return tf.map_fn(tf.reduce_mean,tf.convert_to_tensor([
+        rang(a,(103,103),10),
+        rang(a,(103,123),10),
+        rang(a,(103,143),10),
+        rang(a,(123,93),10),
+        rang(a,(123,113),10),
+        rang(a,(123,133),10),
+        rang(a,(123,153),10),
+        rang(a,(143,103),10),
+        rang(a,(143,123),10),
+        rang(a,(143,143),10)
+    ]))
 
 # # Use this when the image is not padded
 # def _detector_regions(a):
@@ -127,8 +102,22 @@ def _detector_regions(a):
 #         rang(a,(41,41))  # 9
 #     ])) 
     
-def detector_regions(a):
-    b = _detector_regions(tf.abs(a))
+def detector_regions(a, mode):
+    if mode == 0:
+        # original 3*3 detector area
+        b = _detector_regions(tf.abs(a))
+    elif mode == 1:
+        # 2*2
+        b = _detector_regions2(tf.abs(a))
+    elif mode == 2:
+        # 4*4
+        b = _detector_regions4(tf.abs(a))
+    elif mode == 3:
+        # 6*6
+        b = _detector_regions6(tf.abs(a))
+    elif mode == 4:
+        # 10*10
+        b = _detector_regions10(tf.abs(a))
     return tf.square(b)
 
 class TrainDataLoader:

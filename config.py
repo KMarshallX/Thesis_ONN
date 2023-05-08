@@ -14,6 +14,7 @@ parser.add_argument('--sz', type = int, default=256, help="Iuput image size")
 
 # training hyperparameters
 parser.add_argument('--da', type = str, default = "fashion", help="Data type for training, choose between [digit and fashion]")
+parser.add_argument('--dm', type = int, default = 0, help=f"Detector mode, corresponding to different detector areas: 0 -> 3*3, 1 -> 2*2, 2 -> 4*4, 3 -> 6*6, 4 -> 10*10")
 parser.add_argument('--ep', type = int, default = 1, help="Number of epochs")
 parser.add_argument('--ly', type = int, default = 7, help="Number of layers")
 parser.add_argument('--lr', type = float, default = 1e-2, help="Learning rate")
